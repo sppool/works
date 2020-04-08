@@ -10,7 +10,7 @@ def update_coor_mov_status(coor, mov, status):
     r = coor[np.bitwise_and(status > 0, status < 500)]  # 病人座標
     if len(g) and len(r):  # 當病人或是健康人數為0 不在更新
         d_arr = manhattan_distances(r, g)  # 計算病人和健康人距離(array)
-        d = 0.002  # 距離設定
+        d = 0.0019  # 距離設定
         # 距離太近就傳染 status轉換為1(病人)
         g2r = np.any(d_arr < d, 0).astype(np.int)
         status[status == 0] += g2r
@@ -29,7 +29,7 @@ def update_coor_mov_status(coor, mov, status):
     return coor, mov, status
 
 
-n = 1000  # 模擬人數
+n = 1000  # 模擬人數(太多很爽 但是會lag 吃光記憶體會當機 請緩慢增加)
 # 狀態設定 初始0號病人 (0:健康人, 1~500:病人, 500~:凋零不再傳染)
 status = np.zeros(n)  # 狀態設定 初始0號病人 (0:健康人, 1~500:病人, 500~:凋零不再傳染)
 status[0] = 1  # 零號COVID-19病患
@@ -41,7 +41,7 @@ mov = np.float32(mov)  # 節省資源 np.float16 不夠
 coor = np.random.uniform(0, 1, size=(n, 2))  # 位置座標
 coor = np.float32(coor)  # 節省資源
 
-fig_size = 8
+fig_size = 10  # 圖形大小
 fig, ax = plt.subplots(figsize=(fig_size, fig_size))
 p4, = ax.plot('', '', 'ok', ms=3, alpha=0.6)  # 最低圖層
 p2, = ax.plot('', '', 'o', ms=15, c='#ffa000', alpha=0.7)
