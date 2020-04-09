@@ -47,14 +47,15 @@ n = 1000  # 模擬人數(太多很爽 但是會lag 吃光記憶體會當機 請�
 status = np.zeros(n).astype(np.int)
 status[0] = 1  # 零號COVID-19病患
 angle = np.random.uniform(0, 2 * np.pi, n)  # 移動角度
-speed = np.random.uniform(0.5, 1, n) / 400  # 移動速度()
+speed = np.random.uniform(0.3, 1, n)  # 移動速度(可以直接設 1 移動速度相同)
 comp = np.exp(angle * 1j) * speed  # 移動向量
-mov = np.vstack((comp.real, comp.imag)).transpose(1, 0)
-mov = np.float32(mov)  # 節省資源 np.float16 不夠
+step = 400  # 解析度(越大步數越小 直接影響流暢度)
+mov = np.vstack((comp.real, comp.imag)).transpose(1, 0) / step
+mov = mov.astype(np.float32)  # 節省資源 設定 np.float16 會不夠
 coor = np.random.uniform(0, 1, size=(n, 2))  # 位置座標
-coor = np.float32(coor)  # 節省資源
+coor = coor.astype(np.float32)  # 節省資源
 
-fig_size = 10  # init圖形大小
+fig_size = 7  # init圖形大小
 fig, ax = plt.subplots(figsize=(fig_size, fig_size))
 p4, = ax.plot('', '', 'ok', ms=3, alpha=0.5)  # 最低圖層
 p2, = ax.plot('', '', 'o', ms=15, c='#ffa000', alpha=0.8)
