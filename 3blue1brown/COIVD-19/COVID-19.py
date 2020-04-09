@@ -1,13 +1,16 @@
 """
 key 'python COVID-19.py' to run
 
+start from here "3blue1brown"
+"https://www.youtube.com/watch?v=gxAaO2rsdIs"
+
 status  狀態值解釋
 0       : 健康的人
 1~50    : 受感染但'沒有'傳染力
 51~500  : 受感染且有傳染力
 501~600 : 死亡(無傳染), 單純是畫面顯示需要
 
-d (float) 距離設定 這裡用曼哈頓距離 可以減少計算 且已經足夠
+d (float) 0.001~0.003 距離設定 曼哈頓距離 可以減少計算 且已經足夠
 n (int) 點位數量
 """
 
@@ -23,7 +26,7 @@ def update_coor_mov_status(coor, mov, status):
     r = coor[np.bitwise_and(status > 50, status <= 500)]  # 病人座標
     if len(g) and len(r):  # 當病人或是健康人數為0 不在更新
         d_arr = manhattan_distances(r, g)  # 計算病人和健康人距離(array)
-        d = 0.002  # 距離設定
+        d = 0.002  # 距離設定(0.001~0.003)
         # 距離太近就傳染 status轉換為1(病人)
         g2r = np.any(d_arr < d, 0).astype(np.int)  # bool to int
         status[status == 0] += g2r
@@ -55,10 +58,10 @@ mov = mov.astype(np.float32)  # 節省資源 設定 np.float16 會不夠
 coor = np.random.uniform(0, 1, size=(n, 2))  # 位置座標
 coor = coor.astype(np.float32)  # 節省資源
 
-fig_size = 7  # init圖形大小
+fig_size = 8  # init圖形大小
 fig, ax = plt.subplots(figsize=(fig_size, fig_size))
-p4, = ax.plot('', '', 'ok', ms=3, alpha=0.5)  # 最低圖層
-p2, = ax.plot('', '', 'o', ms=15, c='#ffa000', alpha=0.8)
+p4, = ax.plot('', '', 'o', ms=3, c='#404040', alpha=0.5)  # 最低圖層
+p2, = ax.plot('', '', 'o', ms=15, c='#ffa000', alpha=0.7)
 p1, = ax.plot('', '', 'og', ms=5, alpha=0.7)
 p3, = ax.plot('', '', 'or', ms=5, alpha=0.7)
 
