@@ -14,7 +14,7 @@ status  狀態值解釋
 r (float) (0.001~0.003) 接觸距離(半徑)
 n (int) 點位數量 (1000) 太少可以增加 r 提高接觸機會
 
-# 初始感染率 : 1 - ((1 - (r**2) * np.pi)**(n - 1))**450
+初始感染率 : 1 - ((1 - (r**2) * np.pi)**(n - 1))**450
 """
 
 import numpy as np
@@ -30,7 +30,7 @@ def update_coor_mov_status(coor, mov, status):
     if len(g) and len(r):  # 當病人或是健康人數為0 不在更新
         d_arr = manhattan_distances(r, g)  # 計算病人和健康人曼哈頓距離(array)
         r = 0.0015  # 距離設定(0.001~0.003)
-        d = r * np.pi / 2  # 轉換成曼哈頓距離(讓面積相等) 可以減少計算 且已經足夠
+        d = r * (np.pi / 2)**0.5  # 轉換成曼哈頓距離(讓面積相等) 可以減少計算 且已經足夠
         # 距離太近就傳染 status轉換為1(病人)
         g2r = np.any(d_arr < d, 0).astype(np.int)  # bool to int
         status[status == 0] += g2r  # 傳染更新
