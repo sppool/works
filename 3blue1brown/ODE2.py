@@ -11,16 +11,20 @@ from matplotlib.animation import FuncAnimation
 
 def update_arr(arr, rate=1):  # rate(0~1)
     df = np.diff(arr)
+    # dff = np.hstack((df[0], -drf[:-1] + df[1:], -df[-1])) / 2  # 同下
     df_f = np.hstack((0, -df))
     df_r = np.hstack((df, 0))
     dff = (df_f + df_r) / 2
+    dff[0] = 0  # 邊界條件固定溫度, 不加則是絕熱
+    dff[-1] = 0  # 邊界條件固定溫度, 不加則是絕熱
     arr += dff * rate
 
 
 n = 100
 x = np.arange(n)
-arr = np.hstack((np.ones(shape=(n // 2)), np.zeros(n // 2)))
-# arr = np.sin(np.linspace(0, 3 * np.pi, n, endpoint=False))
+# arr = np.hstack((np.ones(shape=(n // 2)), np.zeros(n // 2)))
+# 不同函數
+arr = np.cos(np.linspace(0, 4 * np.pi, n, endpoint=False))
 # arr = np.linspace(0, 5, n)
 max_val, min_val = arr.max(), arr.min()
 
@@ -33,8 +37,8 @@ def init():
 
 
 def update_frame(frame):
-    for i in range(5):
-        update_arr(arr, 0.75)
+    for i in range(10):
+        update_arr(arr, 0.95)
     p.set_data(x, arr)
 
 
